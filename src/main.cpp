@@ -32,6 +32,7 @@ struct Configuration
   int pressureShift;
   int altitudeShift;
   int timeout;
+  String localIp;
 };
 Configuration config{
     1,
@@ -39,6 +40,7 @@ Configuration config{
     0,
     0,
     60 * 60 * 1000,
+    "0.0.0.0",
 };
 
 unsigned long
@@ -115,7 +117,8 @@ void getConfig()
   unsigned long epochTime;
   epochTime = getTime();
   char outputData[256];
-  sprintf(outputData, "{\"timestamp\": %ld, \"timeout\": %d, \"temperatureShift\": %d, \"pressureShift\": %d, \"altitudeShift\": %d}", epochTime, config.timeout, config.temperatureShift, config.pressureShift, config.altitudeShift);
+
+  sprintf(outputData, "{\"timestamp\": %ld, \"localIp\": \"%s\", \"timeout\": %d, \"temperatureShift\": %d, \"pressureShift\": %d, \"altitudeShift\": %d}", epochTime, config.localIp.c_str(), config.timeout, config.temperatureShift, config.pressureShift, config.altitudeShift);
 
   pubSubClient.publish(thingMqttTopicOut, outputData);
 
@@ -133,8 +136,10 @@ void setup()
   Serial.print(ssid);
   WiFi.begin(ssid, password);
   WiFi.waitForConnectResult();
+  String localIp = WiFi.localIP().toString();
   Serial.print(", WiFi connected, IP address: ");
-  Serial.println(WiFi.localIP());
+  Serial.println(localIp);
+  config.localIp = localIp;
 
   // get current time, otherwise certificates are flagged as expired
   setCurrentTime();

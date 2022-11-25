@@ -13,7 +13,7 @@ const int LEDPIN = 4;
 const char index_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE HTML><html>
 <head>
-  <title>ESP Web Server</title>
+  <title>ESP8266-ESP-12F-DOITING Web Server</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="data:,">
   <style>
